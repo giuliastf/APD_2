@@ -1,0 +1,28 @@
+IMBREA GIULIA STEFANIA
+331 CB
+TEMA2-APD
+
+Clasa MyHost
+-   MyHost reprezintă un nod de procesare individual care gestionează execuția task-urilor.
+-   taskQueue: O coadă de prioritate care stochează task-uri în ordinea priorității și a timpului de start.
+    Task-urile cu prioritate mai mare sunt procesate înaintea celor cu prioritate mai mică.
+-   currentTask: Reprezintă task-ul curent care este în proces de execuție.
+-   Flag (ok): O variabilă volatile, utilizată pentru a controla execuția buclei în metoda run.
+    Fiind volatile, se asigură vizibilitatea modificărilor acestei variabile între diferite thread-uri.
+-   Metoda run: Conține logica principală pentru procesarea task-urilor.
+    Se utilizează sincronizare (cu synchronized (this)) pentru a gestiona accesul la taskQueue și currentTask,
+    prevenind astfel condițiile de concurență atunci când task-urile sunt adăugate, preluate sau schimbate.
+-   Metodele addTask, getQueueSize, și getWorkLeft: Sunt marcate ca synchronized, asigurând accesul exclusiv la taskQueue
+    și currentTask în timpul modificărilor și interogărilor, prevenind astfel condițiile de concurență.
+
+Clasa MyDispatcher
+-   MyDispatcher este responsabilă de repartizarea task-urilor către diferite instanțe MyHost în funcție de algoritmul de scheduling specificat.
+-   Round Robin Scheduling: Task-urile sunt distribuite egal între host-uri.
+    Se folosește un AtomicInteger (lastHostId) pentru a reține ID-ul ultimului host utilizat, asigurându-se astfel distribuția uniformă
+    a task-urilor și evitând condițiile de concurență în accesarea și actualizarea acestui ID.
+-   Shortest Queue Scheduling: Alege hostul cu cea mai scurtă coadă de așteptare. Se compară cozile tuturor host-urilor pentru a găsi cea mai scurtă coadă.
+-   Size Interval Task Assignment (SITA): Task-urile sunt distribuite pe baza lungimii lor (scurt, mediu, lung) către host-uri specifice.
+-   Least Work Left Scheduling: Alege hostul cu cea mai mică cantitate de muncă rămasă.
+
+Prin utilizarea structurilor de date thread-safe (cum ar fi AtomicInteger) și sincronizarea adecvată în clase,
+acest cod gestionează eficient condițiile de concurență, asigurând în același timp o distribuție corectă și eficientă a task-urilor într-un mediu multi-threaded.
